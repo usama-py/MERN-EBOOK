@@ -7,6 +7,11 @@ services:
       - mern_network
     environment:
       MONGO_URI: mongodb://mongo:27017/mydatabase
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./mern/backend:/app
+      - /app/node_modules
+    command: npm run dev
     depends_on:
       - mongodb
 
@@ -18,9 +23,11 @@ services:
       - mern_network
     environment:
       REACT_APP_API_URL: http://backend:5050
+      CHOKIDAR_USEPOLLING: "true"
     volumes:
-      - ./mern/frontend:/app  # Mount your local frontend folder to the container
-    command: npm start  # Ensure to start the React development server
+      - ./mern/frontend:/app
+      - /app/node_modules
+    command: npm run dev
 
   mongodb:
     image: mongo:latest
