@@ -1,5 +1,7 @@
+import './db/index.db';
 import express from "express"
-import authRouter from "./routes/auth";
+import authRouter from "./routes/auth.routes";
+
 const PORT = process.env.PORT || 5050
 const app = express();
 app.use(express.json());
