@@ -9,7 +9,7 @@ const transport = nodemailer.createTransport({
     port: 2525,
     auth: {
         user: process.env.MAILTRAP_TEST_USER,
-        pass: process.env.MAILTRAP_TEST_PASSWORD
+        pass: process.env.MAILTRAP_TEST_PASS,
     }
 });
 const mail = {
