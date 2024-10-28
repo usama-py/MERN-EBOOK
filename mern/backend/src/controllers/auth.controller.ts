@@ -1,3 +1,4 @@
+
 import { RequestHandler } from "express";
 import crypto from "crypto";
 import VerificationTokenModel from "@/models/verificationToken.model";
