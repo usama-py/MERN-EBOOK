@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import crypto from "crypto";
 import VerificationTokenModel from "@/models/verificationToken.model";
 import UserModel from "@/models/user.model";
+import mail from "@/utils/mail.utils";
 
 
 export const generateAuthLink:RequestHandler = async (req, res) => {
@@ -13,10 +14,17 @@ export const generateAuthLink:RequestHandler = async (req, res) => {
             email
         })
     }
+    const userId = user._id.toString();
+    await VerificationTokenModel.findOneAndDelete({userId})
     const randomToken = crypto.randomBytes(36).toString("hex");
     await VerificationTokenModel.create<{userId:string}>({
-        userId: user._id.toString(),
+        userId,
         token: randomToken,
     })
-    res.json({ok: true});
+    const link = `${process.env.VERIFICATION_LINK}?token=${randomToken}&userId=${userId}`;
+    await mail.sendVerificationMail({
+        link,
+        to: user.email
+    })
+    res.json({message:"Please check your email for link"});
 };
