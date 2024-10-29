@@ -6,7 +6,7 @@ import UserModel from "@/models/user.model";
 import mail from "@/utils/mail.utils";
 import { formatUserProfile, sendErrorResponse } from "@/utils/helper.utils";
 import jwt from 'jsonwebtoken';
-import { profile } from "console";
+import { updateAvatarToCloudinary } from "@/utils/fileUpload.utils";
 
 
 export const generateAuthLink:RequestHandler = async (req, res) => {
@@ -78,11 +78,9 @@ export const verifyAuthToken: RequestHandler = async (req, res) => {
         expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
     })
 
-    // res.redirect(`${process.env.AUTH_SUCCESS_URL}?profile=${JSON.stringify(
-    //     formatUserProfile(user)
-    // )}`)
-
-    res.send();
+    res.redirect(`${process.env.AUTH_SUCCESS_URL}?profile=${JSON.stringify(
+        formatUserProfile(user)
+    )}`)
 }
 
 export const sendProfileInfo: RequestHandler = (req, res) => {
@@ -94,4 +92,28 @@ export const sendProfileInfo: RequestHandler = (req, res) => {
 
 export const logout: RequestHandler = (req, res) => {
     res.clearCookie('authToken').send()
+};
+
+export const updateProfile: RequestHandler = async (req, res) => {
+    const user = await UserModel.findByIdAndUpdate(req.user.id, {
+        name: req.body.name,
+        signedUp: true
+    }, {
+        new: true
+    });
+    if(!user) return sendErrorResponse({
+        res,
+        message: "Somnething went wrong, User not found!",
+        status: 500
+    })
+
+    const file =  req.files.avatar;
+    if(file && !Array.isArray(file)){
+        user.avatar = await updateAvatarToCloudinary(file, user.avatar?.id)
+        await user.save()
+    }
+
+    res.json({
+        profile: formatUserProfile(user)
+    })
 };
