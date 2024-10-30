@@ -46,3 +46,9 @@ export const isAuth: RequestHandler = async (req, res, next) => {
     req.user = formatUserProfile(user);
     next()
 };
+
+
+export const isAuthor: RequestHandler = async(req, res, next) => {
+    if (req.user.role === 'author') next();
+    else sendErrorResponse({message:"Invalid Request! User is not an author yet", res, status:401});
+}

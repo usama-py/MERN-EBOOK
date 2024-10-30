@@ -1,8 +1,8 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { ObjectId } from "mongoose";
 
 export interface BookDoc {
-    author: ObjectId;
+    author: Types.ObjectId;
     title: string;
     slug: string;
     description: string;
@@ -20,7 +20,7 @@ export interface BookDoc {
     };
     fileInfo: {
         id: string;
-        size: number;
+        size: any;
     };
 }
 

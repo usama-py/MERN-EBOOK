@@ -1,5 +1,5 @@
 import { RequestHandler} from "express";
-import { z, ZodType } from "zod";
+import { z, ZodObject, ZodRawShape } from "zod";
 
 export const emailValidationSchema = z.object({
     email: z.string({
@@ -103,7 +103,7 @@ export const newBookSchema = z.object({
     )
   })
 
-export const validate = <T extends unknown>(schema: ZodType<T>): RequestHandler => {
+export const validate = <T extends ZodRawShape>(schema: ZodObject<T>): RequestHandler => {
     return (req, res, next): void => {
 
         const result = schema.safeParse(req.body);
