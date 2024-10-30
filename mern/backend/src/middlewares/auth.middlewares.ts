@@ -11,7 +11,9 @@ declare global {
                 name?: string | null;
                 email: string;
                 role: "user" | "author";
-                avatar?: string
+                avatar?: string;
+                signedUp: boolean;
+                authorId?: string
             }
         }
     }

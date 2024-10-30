@@ -7,7 +7,8 @@ export interface UserDoc{
     role: "user" | "author";
     name?: string | null | undefined;
     signedUp: boolean;
-    avatar?: {url: string; id: string}
+    avatar?: {url: string; id: string},
+    authorId?: ObjectId | null | undefined,
 }
 const userSchema = new Schema({
     name: {
@@ -33,6 +34,10 @@ const userSchema = new Schema({
         type: Object,
         url: String,
         id: String
+    },
+    authorId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Author',
     }
 });
 
