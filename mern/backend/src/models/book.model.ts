@@ -16,7 +16,7 @@ export interface BookDoc {
     };
     cover?: {
         id: string;
-        url: number;
+        url: string;
     };
     fileInfo: {
         id: string;
